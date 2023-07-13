@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Grade Calculator</title>
+  <style>
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"] {
+      width: 50px;
+    }
+    input[type="button"] {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Grade Calculator</h1>
+  
+  <form id="gradeForm">
+    <label for="examGrade">Exam Grade:</label>
+    <input type="text" id="examGrade" name="examGrade">
+    
+    <label for="labGrade">Lab Grade:</label>
+    <input type="text" id="labGrade" name="labGrade">
+    
+    <label for="quizGrade">Quiz Grade:</label>
+    <input type="text" id="quizGrade" name="quizGrade">
+    
+    <input type="button" value="Calculate" onclick="calculateGrade()">
+  </form>
+  
+  <div id="result"></div>
+
+  <script>
+    function calculateGrade() {
+      var examGrade = parseFloat(document.getElementById("examGrade").value);
+      var labGrade = parseFloat(document.getElementById("labGrade").value);
+      var quizGrade = parseFloat(document.getElementById("quizGrade").value);
+      
+      // Make an AJAX request to the Python program
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "grade_calculator.py", true);
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          // Display the result returned by the Python program
+          document.getElementById("result").innerHTML = xhr.responseText;
+        }
+      };
+      
+      // Send the grades to the Python program
+      xhr.send("examGrade=" + examGrade + "&labGrade=" + labGrade + "&quizGrade=" + quizGrade);
+    }
+  </script>
+</body>
+</html>
